@@ -54,12 +54,16 @@ public class UserController {
 
     // POST 요청: ID(이메일) 중복 확인 API
     @PostMapping("/check-id")
-    public Map<String, Object> checkId(@RequestBody String email) {
+    public Map<String, Object> checkId(@RequestBody Map<String, String> request) {
+        // 요청으로 받은 id 출력
+        String id = request.get("id");
+        System.out.println("Received ID: " + id);
+
         // 결과를 저장할 Map
         Map<String, Object> response = new HashMap<>();
 
         // 이메일 중복 확인
-        boolean exists = userRepository.existsByEmail(email.trim());
+        boolean exists = userRepository.existsByEmail(id.trim());
 
         // 응답 작성
         if (exists) {
@@ -69,14 +73,17 @@ public class UserController {
             response.put("isAvailable", true);
             response.put("message", "사용 가능한 ID입니다.");
         }
-
         return response;
     }
 
 
     // POST 요청: 닉네임 중복확인 API
     @PostMapping("/check-nickname")
-    public Map<String, Object> checkNickName(@RequestBody String nickname) {
+    public Map<String, Object> checkNickName(@RequestBody Map<String, String> request) {
+        // 요청받은 Nickname 출력
+        String nickname = request.get("nickname");
+        System.out.println("Received Nickname: " + nickname);
+
         // 결과를 저장할 Map
         Map<String, Object> response = new HashMap<>();
 
@@ -132,7 +139,6 @@ public class UserController {
             return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
         }
     }
-
 
     // POST 요청: 보안질문 답변 확인 API
     @PostMapping("/verify-security-answer")
